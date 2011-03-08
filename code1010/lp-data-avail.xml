@@ -1,0 +1,11 @@
+<note type="base">Applied to table: pub.fin.lp.deep2</note>
+<sel value="fdate>=20091201"/>
+
+<tabu label="Tabulation on Loan History Table" breaks="period">
+  <break col="period" sort="down"/>
+  <tcol source="fdate" fun="first" label="Distrib Date"/>
+  <tcol source="balance" fun="cnt" name="count" label="Loan Count"/>
+</tabu>
+<willbe name="diff" value="count-tshift(count;-1)"/>
+<willbe name="proj_count" value="tshift(count;-1)+tshift(diff;-1)"/>
+<willbe name="pct_complete" value="100*count/proj_count" label="% Data`Available"/>
