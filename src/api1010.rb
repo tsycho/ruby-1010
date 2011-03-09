@@ -19,7 +19,7 @@ class API1010
 	include URL1010
 	
 	# Constants
-	MAX_RETRIES = 10
+	MAX_RETRIES = 20
 	WRAP_1010_TAG = 'response_1010'
 	PROXY = URI.parse("http://proxy.jpmchase.net:8443")
 	DEFAULT_SEPARATOR = ","
@@ -60,7 +60,7 @@ class API1010
 		print "Running query..."
 		
 		while attempts < MAX_RETRIES
-			run_1010(url, body) do |json|
+			should_retry = run_1010(url, body) do |json|
 				# Generate XML query to retrieve results			
 				body_xml = get_data_1010_query(json, options)
 				url = get_url("getdata", @uid, @password, @sid)
@@ -83,8 +83,11 @@ class API1010
 			end #run_1010 query block
 			
 			attempts += 1
-			print "failed\nRetrying(#{attempts})..."
-		end # while loop		
+			return nil if not should_retry
+			print "Retrying(#{attempts})..."
+		end # while loop
+		
+		return nil # This happens only if the code failed after MAX_RETRIES
 	end #run_query
 	
 	# Clear 1010's cache
@@ -109,18 +112,19 @@ private
 				json = XmlSimple.xml_in( xml, xml_params )
 				
 				if json['rc'] != '0' # 1010 error response
-					handle_1010_error(json['rc'], json['msg'])
+					return handle_1010_error(json['rc'], json['msg'])
 				else
 					yield(json, xml) if block_given?
 				end
 			end
 		rescue Exception => e
 			puts "Exception while running query: #{e}"
+			return true
 		end
 	end
 	
 	def post_query(url, body = "")
-		headers = {	"Content-Type" => "text/xml" }				
+		headers = {	"Content-Type" => "text/xml" }
 		uri = URI.parse(url)
 		
 		http = Net::HTTP::Proxy(PROXY.host, PROXY.port).new(uri.host, uri.port)
@@ -156,12 +160,14 @@ private
 	def handle_network_error(resp, message = "Network/IO error")
 		puts message
 		puts "Error code: #{resp.code}, #{resp.code_type}"
-		puts "Error body:\n#{resp.body}"
+		puts #{resp.body}
+		return true	# Retry, since the network error might go away
 	end
 	
 	def handle_1010_error(rc, msg)
 		puts "1010 Error, code: #{rc}"
 		puts msg
+		return false # Since there's probably something wrong with the code, no point in retrying
 	end
 end
 
