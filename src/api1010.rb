@@ -177,7 +177,7 @@ if $0 == __FILE__
 	api = API1010.new(USERNAME, PASSWORD)
 	
 	api.login
-	api.run_query( { 
+	json = api.run_query( { 
 		:file => '../code1010/lp-data-avail.xml',
 		:table => 'pub.fin.lp.deep2',
 		:outfile => '../output/lp-data-avail.csv' 
