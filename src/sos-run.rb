@@ -1,4 +1,4 @@
-require 'api1010'
+require './api1010'
 
 ROOT_FOLDER = "G:/Asif/Work/Periodicals/Monthly/Credit Monthly/raw/"
 sos_files = File.new(ROOT_FOLDER + "SOS-files.txt", "r").read

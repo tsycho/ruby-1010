@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Deal data - <%= bb_name %></title>
+	</head>
+
+	<body>
+		<div class="deal-data">
+			<h3><%= bb_name %></h3>
+			<table>
+				<thead>
+					<tr>
+						<th>Deal no</th>
+						<th>Intex group</th>
+						<th>Pool id</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<% deal_data.each do |data| %>
+					<tr>
+						<th><%= data[:deal_no] %></th>
+						<th><%= data[:intex_group] %></th>
+						<th><%= data[:pool_id] %></th>
+					</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

@@ -2,9 +2,14 @@
 origfile = ARGV[0]
 newfile = ARGV[1]
 
+if origfile.nil? or newfile.nil?
+	puts "Usage: ruby reduce1010.rb <origfile> <newfile>"
+	return
+end
+
 file = File.new(origfile, "r")
 vars = { "GLOBAL" => [] }
-used_vars = [ "GLOBAL", "num_this_mtg_account", "other_asset_delq" ]
+used_vars = [ "GLOBAL" ]
 final_section = false
 
 while (line = file.gets)

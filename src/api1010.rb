@@ -39,7 +39,7 @@ class API1010
 			@password = json["pswd"]
 			puts "Login successful."
 		end
-	end	
+	end
 	
 	def run_query(options)
 		tableName = options[:table] || 'pub.fin.lp.histplus'
