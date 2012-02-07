@@ -4,27 +4,74 @@
 	</head>
 
 	<body>
-		<div class="deal-data">
-			<h3><%= bb_name %></h3>
-			<table>
-				<thead>
-					<tr>
-						<th>Deal no</th>
-						<th>Intex group</th>
-						<th>Pool id</th>
-					</tr>
-				</thead>
+		<div class="form-wrapper">
+			<form name="check_deal" action="/deal" method="get">
+				<label>Bloomberg name:</label>
+				<input type="text" name="bloomberg_name"/><br/>
 				
-				<tbody>
-					<% deal_data.each do |data| %>
-					<tr>
-						<th><%= data[:deal_no] %></th>
-						<th><%= data[:intex_group] %></th>
-						<th><%= data[:pool_id] %></th>
-					</tr>
-					<% end %>
-				</tbody>
-			</table>
+				<input type="submit" value="Get data"/>
+			</form>
 		</div>
+
+		<h3>Searching <%= bb_name %></h3>
+
+		<h4>Exact matches</h4>
+		<% unless exact_match.nil? %>
+			<div class="deal-data">			
+				<table>
+					<thead>
+						<tr>
+							<th>Deal name</th>
+							<th>Deal no</th>
+							<th>Intex group</th>
+							<th>Pool id</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<% exact_match.each do |data| %>
+						<tr>
+							<td><%= data[:name] %></td>
+							<td><%= data[:deal_no] %></td>
+							<td><%= data[:intex_group] %></td>
+							<td><%= data[:pool_id] %></td>
+						</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+		<% end %>
+
+
+		<br>
+
+		<h4>Fuzzy matches</h4>
+		<% unless fuzzy_match.nil? %>
+			<div class="deal-data">			
+				<table>
+					<thead>
+						<tr>
+							<th>Deal name</th>
+							<th>Deal no</th>
+							<th>Intex group</th>
+							<th>Pool id</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<% fuzzy_match.each do |data| %>
+						<tr>
+							<td><%= data[:name] %></td>
+							<td><%= data[:deal_no] %></td>
+							<td><%= data[:intex_group] %></td>
+							<td><%= data[:pool_id] %></td>
+						</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+		<% end %>
+
+
 	</body>
 </html>
